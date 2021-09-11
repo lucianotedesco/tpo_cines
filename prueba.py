@@ -5,5 +5,8 @@ matriz = []
 
 for f in range(filas):
     matriz.append([])
-    for c in range(columnas):
+    
+    while true
         matriz[f].append(0)
+
+    print("matriz impresa con exito")
