@@ -1,3 +1,3 @@
-Carlos Gardel;10;10;0
-Tita Merello;25;35
-Astor Piazzolla;15;25;0
+Carlos Gardel;10;10;
+Tita Merello;8;15
+Astor Piazzolla;15;10

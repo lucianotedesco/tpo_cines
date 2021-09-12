@@ -1,5 +1,24 @@
 #libreria utilizada en proceso de desarrollo para limpiar pantalla y facilitar lectura entre ejecucciones
 from clear_screen import clear 
+import random
+
+# -------- MODULO SOLICITADO
+#--- Incluir al main esta funcion cargar_sala------
+def cargar_sala(matrizbutacas):
+    '''butacas = 0 No reservadas
+       butacas = X reservadas '''
+    reservadas = []
+    dim = len(matrizbutacas)
+    butacareservada = "X"
+
+    for f in range(dim):
+        for c in range(dim):
+            columna = random.randint(0, dim-1)
+            fila = random.randint(0, dim-1)
+
+            matrizbutacas[fila][columna] = butacareservada
+
+    return matrizbutacas
 
 
 # ------------- MATRICES
@@ -86,8 +105,8 @@ def SALA_obtener_butacas(salaSeleccionada):
     except IndexError:
         print("!> No se pudo obtener la información completa de las salas, por favor revise la estructura del archivo \"salas.txt\"")
 
-    #acá el sistema deberia llamar a cargar_matriz y simular el llenado de la sala
-    return matrizSalaVacia
+    butacas_sala = cargar_sala(matrizSalaVacia)
+    return butacas_sala
 
 
 # ------------- VISUAL
@@ -100,6 +119,17 @@ def VISUAL_mostrar_mensajes_inicio():
     print("")
     print("")
 
+
+def imprimirmatrizbutacas(matrizbutacas):
+    for f in range(len(matrizbutacas)):
+        for c in range(len(matrizbutacas)):
+            print(matrizbutacas[f][c], end="   ")
+        print()
+
+# dim=int(input("Ingresar cantidad de la matrizbutacas: "))
+# matrizbutacas=MATRIZ_crear(dim, dim)
+# matrizbutacas=cargar_sala(matrizbutacas)
+# imprimirmatrizbutacas(matrizbutacas)
 
 # --------------------------------
 # ------------- PROGRAMA PRINCIPAL
@@ -117,6 +147,9 @@ def main():
 
         print(f"■ SALA \"{salaSeleccionada[0]}\"")
         #mostrar_butacas(butacasSalaActual)
+        imprimirmatrizbutacas(butacasSalaActual)
         test = input("seguir")
     
 main()
+
+
