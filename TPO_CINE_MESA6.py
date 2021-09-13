@@ -3,6 +3,25 @@ from clear_screen import clear
 import random
 
 # -------- MODULO SOLICITADO
+
+def mostrar_butacas(matriz):
+    filas = len(matriz)
+    columnas = len(matriz[0])
+    
+    print(columnas*"▓"*3)
+    print(columnas*"▓"*3)
+    
+    for f in range(filas):
+        for c in range(columnas):
+            if matriz[f][c] == 0:
+                print(" ◙ ", end="")
+            else:
+                print(" · ", end="")
+        print()
+
+    print("")
+    print("(LIBRE: ◙ | RESERVADA: ·)")
+
 #--- Incluir al main esta funcion cargar_sala------
 def cargar_sala(matrizbutacas):
     '''Llena aleatoriamente la sala, simulando las reservas que pudieron haberse realizado. (0 = Vacía | 1 = Reservada)'''
@@ -120,10 +139,6 @@ def imprimirmatrizbutacas(matrizbutacas):
             print(matrizbutacas[f][c], end="   ")
         print()
 
-# dim=int(input("Ingresar cantidad de la matrizbutacas: "))
-# matrizbutacas=MATRIZ_crear(dim, dim)
-# matrizbutacas=cargar_sala(matrizbutacas)
-# imprimirmatrizbutacas(matrizbutacas)
 
 # --------------------------------
 # ------------- PROGRAMA PRINCIPAL
@@ -140,8 +155,10 @@ def main():
         butacasSalaActual = SALA_obtener_butacas(salaSeleccionada)
 
         print(f"■ SALA \"{salaSeleccionada[0]}\"")
-        #mostrar_butacas(butacasSalaActual)
-        imprimirmatrizbutacas(butacasSalaActual)
+        print("")
+        mostrar_butacas(butacasSalaActual)
+        print("")
+
         test = input("seguir")
     
 main()
