@@ -1,38 +1,6 @@
 #libreria utilizada en proceso de desarrollo para limpiar pantalla y facilitar lectura entre ejecucciones
 from clear_screen import clear 
-import random
-
-# -------- MODULO SOLICITADO
-
-def mostrar_butacas(matriz):
-    filas = len(matriz)
-    columnas = len(matriz[0])
-    
-    print(columnas*"▓"*3)
-    print(columnas*"▓"*3)
-    
-    for f in range(filas):
-        for c in range(columnas):
-            if matriz[f][c] == 0:
-                print(" ◙ ", end="")
-            else:
-                print(" · ", end="")
-        print()
-
-    print("")
-    print("(LIBRE: ◙ | RESERVADA: ·)")
-
-#--- Incluir al main esta funcion cargar_sala------
-def cargar_sala(matrizbutacas):
-    '''Llena aleatoriamente la sala, simulando las reservas que pudieron haberse realizado. (0 = Vacía | 1 = Reservada)'''
-
-    for f in range(len(matrizbutacas)):
-        for c in range(len(matrizbutacas[f])):
-            butacaReservada = random.randint(0, 1)
-            matrizbutacas[f][c] = butacaReservada
-
-    return matrizbutacas
-
+import FUNCIONES_MESA6
 
 # ------------- MATRICES
 
@@ -118,7 +86,7 @@ def SALA_obtener_butacas(salaSeleccionada):
     except IndexError:
         print("!> No se pudo obtener la información completa de las salas, por favor revise la estructura del archivo \"salas.txt\"")
 
-    butacas_sala = cargar_sala(matrizSalaVacia)
+    butacas_sala = FUNCIONES_MESA6.cargar_sala(matrizSalaVacia)
     return butacas_sala
 
 
@@ -156,7 +124,7 @@ def main():
 
         print(f"■ SALA \"{salaSeleccionada[0]}\"")
         print("")
-        mostrar_butacas(butacasSalaActual)
+        FUNCIONES_MESA6.mostrar_butacas(butacasSalaActual)
         print("")
 
         test = input("seguir")
