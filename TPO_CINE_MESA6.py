@@ -5,18 +5,12 @@ import random
 # -------- MODULO SOLICITADO
 #--- Incluir al main esta funcion cargar_sala------
 def cargar_sala(matrizbutacas):
-    '''butacas = 0 No reservadas
-       butacas = X reservadas '''
-    reservadas = []
-    dim = len(matrizbutacas)
-    butacareservada = "X"
+    '''Llena aleatoriamente la sala, simulando las reservas que pudieron haberse realizado. (0 = Vacía | 1 = Reservada)'''
 
-    for f in range(dim):
-        for c in range(dim):
-            columna = random.randint(0, dim-1)
-            fila = random.randint(0, dim-1)
-
-            matrizbutacas[fila][columna] = butacareservada
+    for f in range(len(matrizbutacas)):
+        for c in range(len(matrizbutacas[f])):
+            butacaReservada = random.randint(0, 1)
+            matrizbutacas[f][c] = butacaReservada
 
     return matrizbutacas
 
@@ -122,7 +116,7 @@ def VISUAL_mostrar_mensajes_inicio():
 
 def imprimirmatrizbutacas(matrizbutacas):
     for f in range(len(matrizbutacas)):
-        for c in range(len(matrizbutacas)):
+        for c in range(len(matrizbutacas[f])):
             print(matrizbutacas[f][c], end="   ")
         print()
 
