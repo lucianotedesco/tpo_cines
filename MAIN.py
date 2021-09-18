@@ -132,15 +132,14 @@ def RESERVA_intentar_reserva_individual(salaSeleccionada):
     mensajeErrorCapacidad = "La posición ingresada no existe en la sala"
     butacaElegida = UTILS_ingresar_entero_en_rango(0,totalButacasSala,mensajeErrorCapacidad)
 
-    fila,columna = UTILS_transformar_butaca_en_coordenada(butacaElegida, salaSeleccionada)
-    
+    fila,columna = UTILS_transformar_butaca_en_coordenada(butacaElegida, salaSeleccionada)    
     reservaRealizada = FUNCIONES_MESA6.reservar(butacas,fila,columna)
     clear()
 
     print("")
     FUNCIONES_MESA6.mostrar_butacas(butacas)
     print("")
-    
+
     if not (reservaRealizada):        
         print("!> La butaca que intentó reservar ya se encuentra ocupada")
     else:
