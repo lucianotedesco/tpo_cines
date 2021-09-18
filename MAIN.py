@@ -1,5 +1,5 @@
 #libreria utilizada en proceso de desarrollo para limpiar pantalla y facilitar lectura entre ejecucciones
-from clear_screen import clear 
+from clear_screen import clear
 import FUNCIONES_MESA6
 
 # ------------- MATRICES
@@ -21,20 +21,20 @@ def ARCHIVO_cargar_salas(salasCine):
     '''Obtengo del archivo de salas las mismas, su nombre y su capacidad'''
 
     try:
-        arch = open("salas.txt")    
+        arch = open("salas.txt")
     except OSError as msg:
         print("Error:", msg)
     else:
         linea = arch.readline()
         i = 0
         erroresLectura = []
-        while linea: 
+        while linea:
             try:
                 salasCine[i] = linea.strip().split(";")
             except ValueError:
-                erroresLectura.append(i)           
-                
-            linea = arch.readline()       
+                erroresLectura.append(i)
+
+            linea = arch.readline()
             i += 1
             if (len(erroresLectura)):
                 print("Han ocurrido los siguientes errores:", erroresLectura)
@@ -47,9 +47,9 @@ def ARCHIVO_cargar_salas(salasCine):
 
 # ------------- UTILIDADES GENERICAS
 
-def UTILS_ingresar_entero_en_rango(enteroInicial, enteroFinal):
+def UTILS_ingresar_entero_en_rango(enteroInicial, enteroFinal, mensajeError):
     '''Le pide al usuario ingresar un numero hasta que el mismo sea un entero, comprendido entre el rango solicitado.
-       Los extremos están incluidos.'''
+       Los extremos están incluidos. Recibe el mensaje de error que debe mostrarse.'''
 
     while True:
         try:
@@ -57,13 +57,13 @@ def UTILS_ingresar_entero_en_rango(enteroInicial, enteroFinal):
             if num < int(enteroInicial) or num > int(enteroFinal): raise ValueError
             break
         except ValueError:
-            print("!> El valor ingresado no pudo se encontrado. Por favor, ingrese un número valido")
+            print(f"!> {mensajeError}")
 
     return num
 
 
 # ------------- SALAS
-       
+
 def SALA_seleccionar(salasCine):
     '''Permito que el usuario seleccione una sala, y devuelvo el registro de sala junto a su indice'''
 
@@ -74,7 +74,8 @@ def SALA_seleccionar(salasCine):
 
     numeroPrimerSala = 1
     numeroUltimaSala = len(salasCine)
-    indiceSala = UTILS_ingresar_entero_en_rango(numeroPrimerSala, numeroUltimaSala)
+    mensajeErrorSalaNoEncontrada = "La sala ingresada no fue encontrada, intente nuevamente"
+    indiceSala = UTILS_ingresar_entero_en_rango(numeroPrimerSala, numeroUltimaSala, mensajeErrorSalaNoEncontrada)
 
     return salasCine[indiceSala - 1]
 
@@ -89,6 +90,17 @@ def SALA_obtener_butacas(salaSeleccionada):
     butacas_sala = FUNCIONES_MESA6.cargar_sala(matrizSalaVacia)
     return butacas_sala
 
+def SALA_realizar_reserva(butacasSalaSeleccionada):
+    mensajeErrorCapacidad = "La cantidad de entradas es inválida (recuerde que no puede superar la capacidad actual). Intente nuevamente"
+    capacidadSala = FUNCIONES_MESA6.butacas_libres(butacasSalaSeleccionada)  #ACA DEBERIA LLAMARSE A BUTACAS LIBRES EN REALIDAD
+
+    print(f"■ QUEDAN {capacidadSala} ASIENTOS DISPONIBLES")
+    print("■ Para realizar una reserva, ingrese la cantidad de entradas que necesita")
+    cantidadEntradas = UTILS_ingresar_entero_en_rango(1,capacidadSala,mensajeErrorCapacidad)
+
+    # if cantidadEntradas == 1:
+    #     FUNCIONES_MESA6.reserva(butacasSalaSeleccionada, )
+
 
 # ------------- VISUAL
 
@@ -101,16 +113,12 @@ def VISUAL_mostrar_mensajes_inicio():
     print("")
 
 
-def imprimirmatrizbutacas(matrizbutacas):
-    for f in range(len(matrizbutacas)):
-        for c in range(len(matrizbutacas[f])):
-            print(matrizbutacas[f][c], end="   ")
-        print()
+
 
 
 # --------------------------------
 # ------------- PROGRAMA PRINCIPAL
-
+    #TODO: UNIFICAR infoSalaSeleccionada y butacasSalaSeleccionada en una misma variable
 def main():
     while True:
         clear()
@@ -119,16 +127,17 @@ def main():
         salasCine = MATRIZ_crear(3,5)
         ARCHIVO_cargar_salas(salasCine)
 
-        salaSeleccionada = SALA_seleccionar(salasCine)
-        butacasSalaActual = SALA_obtener_butacas(salaSeleccionada)
+        infoSalaSeleccionada = SALA_seleccionar(salasCine)
+        butacasSalaSeleccionada = SALA_obtener_butacas(infoSalaSeleccionada)
 
-        print(f"■ SALA \"{salaSeleccionada[0]}\"")
+        print(f"■ SALA \"{infoSalaSeleccionada[0]}\"")
         print("")
-        FUNCIONES_MESA6.mostrar_butacas(butacasSalaActual)
+        FUNCIONES_MESA6.mostrar_butacas(butacasSalaSeleccionada)
         print("")
 
-        test = input("seguir")
-    
+        SALA_realizar_reserva(butacasSalaSeleccionada)
+
+
 main()
 
 
