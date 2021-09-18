@@ -1,6 +1,8 @@
 #libreria utilizada en proceso de desarrollo para limpiar pantalla y facilitar lectura entre ejecucciones
 from clear_screen import clear
+import math
 import FUNCIONES_MESA6
+
 
 # ------------- MATRICES
 
@@ -61,6 +63,12 @@ def UTILS_ingresar_entero_en_rango(enteroInicial, enteroFinal, mensajeError):
 
     return num
 
+def UTILS_transformar_butaca_en_coordenada(numeroButaca, infoSalaSeleccionada):
+    longitudFilas = int(infoSalaSeleccionada[2])
+
+    fila = math.floor(numeroButaca / longitudFilas)
+    columna = numeroButaca % longitudFilas
+    return fila, columna         
 
 # ------------- SALAS
 
@@ -80,7 +88,7 @@ def SALA_seleccionar(salasCine):
     return salasCine[indiceSala - 1]
 
 def SALA_obtener_butacas(salaSeleccionada):
-    '''Obtenemos una matriz representando la ocupación de las butacas en la sala'''
+    '''Obtenemos una matriz representando la ocupación de las butacas en la sala, y la agregamos junto con su información.'''
 
     try:
         matrizSalaVacia = MATRIZ_crear(salaSeleccionada[1],salaSeleccionada[2])
@@ -88,18 +96,57 @@ def SALA_obtener_butacas(salaSeleccionada):
         print("!> No se pudo obtener la información completa de las salas, por favor revise la estructura del archivo \"salas.txt\"")
 
     butacas_sala = FUNCIONES_MESA6.cargar_sala(matrizSalaVacia)
-    return butacas_sala
+    salaSeleccionada.append([])
+    salaSeleccionada[3] = butacas_sala
 
-def SALA_realizar_reserva(butacasSalaSeleccionada):
-    mensajeErrorCapacidad = "La cantidad de entradas es inválida (recuerde que no puede superar la capacidad actual). Intente nuevamente"
-    capacidadSala = FUNCIONES_MESA6.butacas_libres(butacasSalaSeleccionada)  #ACA DEBERIA LLAMARSE A BUTACAS LIBRES EN REALIDAD
+def RESERVA_iniciar_reservacion(salaSeleccionada):
+    '''Realizamos la reserva de butacas en la sala recibida, obteniendo del usuario la cantidad de entradas que desea'''
+    butacas = salaSeleccionada[3]
 
+    capacidadSala = FUNCIONES_MESA6.butacas_libres(butacas)
+        
     print(f"■ QUEDAN {capacidadSala} ASIENTOS DISPONIBLES")
     print("■ Para realizar una reserva, ingrese la cantidad de entradas que necesita")
+    mensajeErrorCapacidad = "La cantidad de entradas es inválida (recuerde que no puede superar la capacidad actual). Intente nuevamente"
     cantidadEntradas = UTILS_ingresar_entero_en_rango(1,capacidadSala,mensajeErrorCapacidad)
+    
+    reservaRealizada = False    
+    if cantidadEntradas == 1:
+        while not reservaRealizada: 
+            RESERVA_intentar_reserva_individual(salaSeleccionada)
+    else:
+        for entrada in range(cantidadEntradas):
+            print(f"■ Aún debe elegir {cantidadEntradas - entrada} entradas:")
+            while not reservaRealizada: 
+                reservaRealizada = RESERVA_intentar_reserva_individual(salaSeleccionada)
+            reservaRealizada = False
+    
 
-    # if cantidadEntradas == 1:
-    #     FUNCIONES_MESA6.reserva(butacasSalaSeleccionada, )
+def RESERVA_intentar_reserva_individual(salaSeleccionada):
+    '''Intentamos reservar un asiento en particular'''
+
+    butacas = salaSeleccionada[3]
+
+    print("■ Digite la posición de la butaca deseada:")   
+    totalButacasSala = int(salaSeleccionada[1]) * int(salaSeleccionada[2])
+    mensajeErrorCapacidad = "La posición ingresada no existe en la sala"
+    butacaElegida = UTILS_ingresar_entero_en_rango(0,totalButacasSala,mensajeErrorCapacidad)
+
+    fila,columna = UTILS_transformar_butaca_en_coordenada(butacaElegida, salaSeleccionada)
+    
+    reservaRealizada = FUNCIONES_MESA6.reservar(butacas,fila,columna)
+    clear()
+
+    print("")
+    FUNCIONES_MESA6.mostrar_butacas(butacas)
+    print("")
+    
+    if not (reservaRealizada):        
+        print("!> La butaca que intentó reservar ya se encuentra ocupada")
+    else:
+        print("■ RESERVA REALIZADA!")
+
+    return reservaRealizada
 
 
 # ------------- VISUAL
@@ -114,8 +161,6 @@ def VISUAL_mostrar_mensajes_inicio():
 
 
 
-
-
 # --------------------------------
 # ------------- PROGRAMA PRINCIPAL
     #TODO: UNIFICAR infoSalaSeleccionada y butacasSalaSeleccionada en una misma variable
@@ -123,19 +168,23 @@ def main():
     while True:
         clear()
         VISUAL_mostrar_mensajes_inicio()
+        
 
         salasCine = MATRIZ_crear(3,5)
         ARCHIVO_cargar_salas(salasCine)
 
-        infoSalaSeleccionada = SALA_seleccionar(salasCine)
-        butacasSalaSeleccionada = SALA_obtener_butacas(infoSalaSeleccionada)
+        salaSeleccionada = SALA_seleccionar(salasCine)
+        SALA_obtener_butacas(salaSeleccionada)
 
-        print(f"■ SALA \"{infoSalaSeleccionada[0]}\"")
+        clear()
+        print(f"■ SALA \"{salaSeleccionada[0]}\"")
         print("")
-        FUNCIONES_MESA6.mostrar_butacas(butacasSalaSeleccionada)
+        FUNCIONES_MESA6.mostrar_butacas(salaSeleccionada[3])
         print("")
-
-        SALA_realizar_reserva(butacasSalaSeleccionada)
+        
+        RESERVA_iniciar_reservacion(salaSeleccionada)
+        print("")
+        print("■ Ha terminado con las reservas solicitadas! Se lo redigirá al sistema de facturación... Pulse una tecla para continuar­")
 
 
 main()

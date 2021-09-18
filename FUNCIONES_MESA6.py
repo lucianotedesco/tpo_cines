@@ -1,26 +1,57 @@
 import random
 
-def mostrar_butacas(salaCine):
+def mostrar_butacas(matriz):
     '''Muestra el estado actual de la reserva de butacas de la sala en cuestion, de frente a la pantalla
     Autor: Rodrigo Forcadell '''
 
-    filas = len(salaCine)
-    columnas = len(salaCine[0])
-    
-    print(columnas*"▓"*3)
-    print(columnas*"▓"*3)
+    filas = len(matriz)
+    columnas = len(matriz[0])
+    butaca = 0
+    print(columnas*"▓"*6)
+    print(columnas*"▓"*6)
     
     for f in range(filas):
         for c in range(columnas):
-            if salaCine[f][c] == 0:
-                print(" ◙ ", end="")
-            else:
-                print(" · ", end="")
-        print()
+            if matriz[f][c] == 0:
+                print("%5d" %butaca , end=" ")
+            else:     
+                espacio = len(str(butaca)) * " " + "■"
+                print("%5s" %espacio , end=" ")
+            butaca+=1
+        print()   
 
     print("")
-    print("(LIBRE: ◙ | RESERVADA: ·)")
+    print("(LIBRE: (n°) | RESERVADA: ■)")
 
+def butacas_contiguas(matriz,n_fila):
+    '''Busca la mayor cantidad de butacas contiguas en la fila recibida, y devuelve tanto la cantidad como su ubicación
+    Autor: Rodrigo Forcadell'''
+
+    seguidas = 0
+    maxcontador = 0
+    columna = 0
+    ubicacion = -1
+    
+    if 0 in matriz[n_fila]:
+        for butaca in matriz[n_fila]:
+            
+            if butaca == 0:
+                seguidas+=1
+                                
+            elif maxcontador<seguidas:
+                
+                maxcontador = seguidas
+                ubicacion = columna-seguidas
+                seguidas=0
+            columna+=1    
+        if maxcontador<seguidas:
+                
+                maxcontador = seguidas
+                ubicacion = columna-seguidas
+                seguidas=0
+        return ubicacion, maxcontador         
+    else:
+        return ubicacion, maxcontador
 
 def cargar_sala(matrizSala):
     '''Llena aleatoriamente la sala, simulando las reservas que pudieron haberse realizado. (0 = Vacía | 1 = Reservada)
@@ -57,7 +88,7 @@ def reservar(matriz,x,y):
         if matriz[x][y] == 0:
             matriz[x][y] = 1
         else:
-            raise IndexError
+            reserva = False
     
     except IndexError:
         reserva = False
