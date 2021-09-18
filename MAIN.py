@@ -63,12 +63,17 @@ def UTILS_ingresar_entero_en_rango(enteroInicial, enteroFinal, mensajeError):
 
     return num
 
-def UTILS_transformar_butaca_en_coordenada(numeroButaca, infoSalaSeleccionada):
-    longitudFilas = int(infoSalaSeleccionada[2])
+def UTILS_transformar_butaca_en_coordenada(numeroButaca, salaSeleccionada):
+    longitudFilas = int(salaSeleccionada[2])
 
     fila = math.floor(numeroButaca / longitudFilas)
     columna = numeroButaca % longitudFilas
     return fila, columna         
+
+def UTILS_transformar_coordenada_en_butaca(fila, columna, cantidadColumnas):
+    numeroButaca = ((fila + 2) * cantidadColumnas) + cantidadColumnas - columna
+    return numeroButaca
+
 
 # ------------- SALAS
 
@@ -99,6 +104,20 @@ def SALA_obtener_butacas(salaSeleccionada):
     salaSeleccionada.append([])
     salaSeleccionada[3] = butacas_sala
 
+def SALA_mayor_cantidad_butacas_contiguas(salaSeleccionada):
+
+    mayorCantidadButacasJuntas = 0
+    for fila in range(salaSeleccionada[1]):
+        cantidadButacas,columna = FUNCIONES_MESA6.butacas_contiguas(salaSeleccionada[3], fila)
+        if cantidadButacas > mayorCantidadButacasJuntas:
+            mayorCantidadButacasJuntas = cantidadButacas
+
+    numeroButaca = UTILS_transformar_coordenada_en_butaca(fila, columna, salaSeleccionada[2])
+
+    return mayorCantidadButacasJuntas, numeroButaca
+
+# ------------- RESERVAS
+
 def RESERVA_iniciar_reservacion(salaSeleccionada):
     '''Realizamos la reserva de butacas en la sala recibida, obteniendo del usuario la cantidad de entradas que desea'''
     butacas = salaSeleccionada[3]
@@ -110,6 +129,11 @@ def RESERVA_iniciar_reservacion(salaSeleccionada):
     mensajeErrorCapacidad = "La cantidad de entradas es inválida (recuerde que no puede superar la capacidad actual). Intente nuevamente"
     cantidadEntradas = UTILS_ingresar_entero_en_rango(1,capacidadSala,mensajeErrorCapacidad)
     
+    mayorCantidadButacasJuntas,  = SALA_mayor_cantidad_butacas_contiguas(salaSeleccionada)
+
+    if (mayorCantidadButacasJuntas >= cantidadEntradas):
+        print(f"■ RESERVA INTELIGENTE INICIADA: Puede reservar las {cantidadEntradas} juntas, desde la {} a la {}. ")
+
     reservaRealizada = False    
     if cantidadEntradas == 1:
         while not reservaRealizada: 
@@ -162,7 +186,7 @@ def VISUAL_mostrar_mensajes_inicio():
 
 # --------------------------------
 # ------------- PROGRAMA PRINCIPAL
-    #TODO: UNIFICAR infoSalaSeleccionada y butacasSalaSeleccionada en una misma variable
+
 def main():
     while True:
         clear()

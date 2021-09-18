@@ -25,7 +25,7 @@ def mostrar_butacas(matriz):
 
 def butacas_contiguas(matriz,n_fila):
     '''Busca la mayor cantidad de butacas contiguas en la fila recibida, y devuelve tanto la cantidad como su ubicación
-    Autor: Rodrigo Forcadell'''
+    Autor: Hernan'''
 
     seguidas = 0
     maxcontador = 0
