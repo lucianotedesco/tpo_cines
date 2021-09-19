@@ -1,8 +1,12 @@
 import random
 
 def mostrar_butacas(matriz):
-    '''Muestra el estado actual de la reserva de butacas de la sala en cuestion, de frente a la pantalla
+    '''Muestra el estado actual de la reserva de butacas de la sala en cuestion, mostrando la pantalla del cine como referencia de ubicación.
     Autor: Rodrigo Forcadell '''
+
+    #el sistema adjunta al principio del print codigos de colores para hacer mas interactiva la experiencia
+    greenColor = '\033[92m'
+    whiteColor = "\033[0m"
 
     print("")
     filas = len(matriz)
@@ -14,15 +18,17 @@ def mostrar_butacas(matriz):
     for f in range(filas):
         for c in range(columnas):
             if matriz[f][c] == 0:
-                print("%5d" %butaca , end=" ")
+                color = whiteColor
+                print(color + "%5d" %butaca , end=" ")
             else:     
-
                 if (matriz[f][c] == 2):
                     caracterOcupado = "X"
+                    color = greenColor
                 else:
+                    color = whiteColor
                     caracterOcupado = "■"
                 espacio = len(str(butaca)) * " " + caracterOcupado
-                print("%5s" %espacio , end=" ")
+                print(color + "%5s" %espacio , end=" ")
             butaca+=1
         print()   
 
@@ -49,6 +55,7 @@ def butacas_contiguas(matriz,n_fila):
             columnaInicio = (columnaFin + 1) - contiguas           
     return columnaInicio, maxButacasContiguas
 
+
 def cargar_sala(matrizSala):
     '''Llena aleatoriamente la sala, simulando las reservas que pudieron haberse realizado. (0 = Vacía | 1 = Reservada)
     Autor: Gustavo Escudero'''
@@ -59,6 +66,7 @@ def cargar_sala(matrizSala):
             matrizSala[f][c] = butacaReservada
 
     return matrizSala
+
 
 def butacas_libres(matrizSala): 
     '''Recibe una sala y devuelve la cantidad de butacas disponibles
@@ -74,6 +82,7 @@ def butacas_libres(matrizSala):
                 cont_libres = cont_libres + 1
 
     return cont_libres     
+
 
 def reservar(matriz,x,y):
     '''Recibe una representación matricial de una sala de cine y reserva la butaca seleccionada
