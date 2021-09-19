@@ -4,6 +4,7 @@ def mostrar_butacas(matriz):
     '''Muestra el estado actual de la reserva de butacas de la sala en cuestion, de frente a la pantalla
     Autor: Rodrigo Forcadell '''
 
+    print("")
     filas = len(matriz)
     columnas = len(matriz[0])
     butaca = 0
@@ -15,39 +16,38 @@ def mostrar_butacas(matriz):
             if matriz[f][c] == 0:
                 print("%5d" %butaca , end=" ")
             else:     
-                espacio = len(str(butaca)) * " " + "■"
+
+                if (matriz[f][c] == 2):
+                    caracterOcupado = "X"
+                else:
+                    caracterOcupado = "■"
+                espacio = len(str(butaca)) * " " + caracterOcupado
                 print("%5s" %espacio , end=" ")
             butaca+=1
         print()   
 
     print("")
-    print("(LIBRE: (n°) | RESERVADA: ■)")
+    print("(LIBRE: n° butaca | RESERVADA: ■ | RESERVAS DE ESTA SESIÓN: X)")
+    print("")
+
 
 def butacas_contiguas(matriz,n_fila):
     '''Busca la mayor cantidad de butacas contiguas en la fila recibida, y devuelve tanto la cantidad como su ubicación
     Autor: Hernan Ducceschi'''
 
-    seguidas = 0
-    maxcontador = 0
-    columna = 0
-    ubicacion = -1
-    
-    if 0 in matriz[n_fila]:
-        for butaca in matriz[n_fila]:            
-            if butaca == 0:
-                seguidas+=1                                
-            elif maxcontador<seguidas:                
-                maxcontador = seguidas
-                ubicacion = columna-seguidas
-                seguidas=0
-            columna+=1    
-        if maxcontador<seguidas:            
-            maxcontador = seguidas
-            ubicacion = columna-seguidas
-            seguidas=0
-        return ubicacion, maxcontador         
-    else:
-        return ubicacion, maxcontador
+    contiguas = 0
+    maxButacasContiguas = 0
+    columnaInicio = 0
+
+    for columnaFin,butaca in enumerate(matriz[n_fila]):
+        if butaca == 0:
+            contiguas += 1
+        else:  
+            contiguas = 0
+        if contiguas > maxButacasContiguas:
+            maxButacasContiguas = contiguas
+            columnaInicio = (columnaFin + 1) - contiguas           
+    return columnaInicio, maxButacasContiguas
 
 def cargar_sala(matrizSala):
     '''Llena aleatoriamente la sala, simulando las reservas que pudieron haberse realizado. (0 = Vacía | 1 = Reservada)
@@ -82,7 +82,7 @@ def reservar(matriz,x,y):
     reserva = True
     try:
         if matriz[x][y] == 0:
-            matriz[x][y] = 1
+            matriz[x][y] = 2
         else:
             reserva = False
     

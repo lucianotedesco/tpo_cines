@@ -132,15 +132,12 @@ def RESERVA_intentar_reserva_individual(salaSeleccionada):
     fila,columna = UTILS_transformar_butaca_en_coordenada(butacaElegida, salaSeleccionada)    
     reservaRealizada = FUNCIONES_MESA6.reservar(butacas,fila,columna)
     clear()
-
-    print("")
     FUNCIONES_MESA6.mostrar_butacas(butacas)
-    print("")
 
     if not (reservaRealizada):        
         print("!> La butaca que intentó reservar ya se encuentra ocupada")
     else:
-        print("■ RESERVA REALIZADA!")
+        print("■ RESERVADA!")
 
     return reservaRealizada
 
@@ -170,6 +167,7 @@ def RESERVA_iniciar_reservacion(salaSeleccionada):
 
     resevaMultipleRealizada = False
     if (cantidadButacas >= cantidadEntradas):
+        print("")
         print(f"■ SUGERENCIA DE RESERVA: Puede reservar las {cantidadEntradas} juntas, desde la {numeroButaca} a la {numeroButaca + cantidadEntradas - 1}.")
         print(f"■ Digite \"R\" para llevar a cabo la reserva. Caso contrario, pulse cualquier tecla")
         respuestaUsuario = input("> ")
@@ -180,6 +178,8 @@ def RESERVA_iniciar_reservacion(salaSeleccionada):
             reservaRealizada = FUNCIONES_MESA6.mostrar_butacas(butacas)
 
     if not resevaMultipleRealizada:
+        print("")
+        print("■ INICIANDO RESERVA MANUAL:")
         reservaRealizada = False
         if cantidadEntradas == 1:
             while not reservaRealizada: 
@@ -191,42 +191,40 @@ def RESERVA_iniciar_reservacion(salaSeleccionada):
                     reservaRealizada = RESERVA_intentar_reserva_individual(salaSeleccionada)
                 reservaRealizada = False
 
+    print("")
+    print("■ RESERVA/S FINALIZADAS! Se lo redigirá al sistema de facturación... Pulse una tecla para continuar­")
+    input("")
+# ------------- SISTEMA
 
-# ------------- VISUAL
+def SISTEMA_carga_inicial():
+    '''Muestro los mensajes de inicio del sistema y obtengo la sala en la cual quiero realizar la reserva'''
 
-def VISUAL_mostrar_mensajes_inicio():
-    '''Muestro los mensajes de inicio del sistema'''
-
+    clear()     
     print("■ Iniciando SIRA: (Sistema Integral de Reserva de Asientos)")
     print("■ BIENVENIDO!     (Producto registrado a nombre de CINES DEL BARRIO S.R.L)")
     print("")
     print("")
+
+    salasCine = MATRIZ_crear(3,5)
+    ARCHIVO_cargar_salas(salasCine)
+
+    salaSeleccionada = SALA_seleccionar(salasCine)
+    SALA_obtener_butacas(salaSeleccionada)
+    clear()
+    print(f"■ SALA \"{salaSeleccionada[0]}\"")
+    return salaSeleccionada
+
+
 
 
 # --------------------------------
 # ------------- PROGRAMA PRINCIPAL
 
 def main():
-    while True:
-        #clear()
-        VISUAL_mostrar_mensajes_inicio()        
-
-        salasCine = MATRIZ_crear(3,5)
-        ARCHIVO_cargar_salas(salasCine)
-
-        salaSeleccionada = SALA_seleccionar(salasCine)
-        SALA_obtener_butacas(salaSeleccionada)
-
-        clear()
-        print(f"■ SALA \"{salaSeleccionada[0]}\"")
-        print("")
-        FUNCIONES_MESA6.mostrar_butacas(salaSeleccionada[3])
-        print("")
-        
-        RESERVA_iniciar_reservacion(salaSeleccionada)
-        print("")
-        print("■ Ha terminado con las reservas solicitadas! Se lo redigirá al sistema de facturación... Pulse una tecla para continuar­")
-
+    salaSeleccionada = SISTEMA_carga_inicial()   
+    butacas = salaSeleccionada[3] 
+    FUNCIONES_MESA6.mostrar_butacas(butacas)
+    RESERVA_iniciar_reservacion(salaSeleccionada)
 
 main()
 
