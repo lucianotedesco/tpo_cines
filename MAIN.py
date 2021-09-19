@@ -1,8 +1,6 @@
-#libreria utilizada en proceso de desarrollo para limpiar pantalla y facilitar lectura entre ejecucciones
-from clear_screen import clear
 import math
 import FUNCIONES_MESA6
-
+from os import system
 
 # ------------- MATRICES
 
@@ -131,7 +129,7 @@ def RESERVA_intentar_reserva_individual(salaSeleccionada):
 
     fila,columna = UTILS_transformar_butaca_en_coordenada(butacaElegida, salaSeleccionada)    
     reservaRealizada = FUNCIONES_MESA6.reservar(butacas,fila,columna)
-    clear()
+    system('cls')
     FUNCIONES_MESA6.mostrar_butacas(butacas)
 
     if not (reservaRealizada):        
@@ -174,7 +172,7 @@ def RESERVA_iniciar_reservacion(salaSeleccionada):
         if (respuestaUsuario.lower() == "r"):            
             RESERVA_realizar_reserva_multiple(salaSeleccionada, filaButacaContigua, columnaButacaContigua, cantidadEntradas)
             resevaMultipleRealizada = True            
-            clear()
+            system('cls')
             reservaRealizada = FUNCIONES_MESA6.mostrar_butacas(butacas)
 
     if not resevaMultipleRealizada:
@@ -199,7 +197,7 @@ def RESERVA_iniciar_reservacion(salaSeleccionada):
 def SISTEMA_carga_inicial():
     '''Muestro los mensajes de inicio del sistema y obtengo la sala en la cual quiero realizar la reserva'''
 
-    clear()     
+    system('cls')     
     print("■ Iniciando SIRA: (Sistema Integral de Reserva de Asientos)")
     print("■ BIENVENIDO!     (Producto registrado a nombre de CINES DEL BARRIO S.R.L)")
     print("")
@@ -210,7 +208,7 @@ def SISTEMA_carga_inicial():
 
     salaSeleccionada = SALA_seleccionar(salasCine)
     SALA_obtener_butacas(salaSeleccionada)
-    clear()
+    system('cls')
     print(f"■ SALA \"{salaSeleccionada[0]}\"")
     return salaSeleccionada
 
