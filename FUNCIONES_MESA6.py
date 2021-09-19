@@ -25,7 +25,7 @@ def mostrar_butacas(matriz):
 
 def butacas_contiguas(matriz,n_fila):
     '''Busca la mayor cantidad de butacas contiguas en la fila recibida, y devuelve tanto la cantidad como su ubicación
-    Autor: Hernan'''
+    Autor: Hernan Ducceschi'''
 
     seguidas = 0
     maxcontador = 0
@@ -33,22 +33,18 @@ def butacas_contiguas(matriz,n_fila):
     ubicacion = -1
     
     if 0 in matriz[n_fila]:
-        for butaca in matriz[n_fila]:
-            
+        for butaca in matriz[n_fila]:            
             if butaca == 0:
-                seguidas+=1
-                                
-            elif maxcontador<seguidas:
-                
+                seguidas+=1                                
+            elif maxcontador<seguidas:                
                 maxcontador = seguidas
                 ubicacion = columna-seguidas
                 seguidas=0
             columna+=1    
-        if maxcontador<seguidas:
-                
-                maxcontador = seguidas
-                ubicacion = columna-seguidas
-                seguidas=0
+        if maxcontador<seguidas:            
+            maxcontador = seguidas
+            ubicacion = columna-seguidas
+            seguidas=0
         return ubicacion, maxcontador         
     else:
         return ubicacion, maxcontador
@@ -86,7 +82,7 @@ def reservar(matriz,x,y):
     reserva = True
     try:
         if matriz[x][y] == 0:
-            matriz[x][y] = 1
+            matriz[x][y] = 2
         else:
             reserva = False
     
