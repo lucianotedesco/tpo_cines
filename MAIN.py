@@ -1,5 +1,10 @@
+#ESTE PRODUCTO PERTENECE A SOLUCIONES CINÉFILAS S.R.L
+#PARA USO Y EXPANSION DE FUNCIONALIDADES CONSULTE
+#BASES Y CONDICIONES EN NUESTRO SITIO WEB
+#IMPORTANTE: ABRIR LEEME.txt ANTES!!
+
 import math
-import FUNCIONES_MESA6
+import SC_MODULOS_CINE
 from os import system
 
 # ------------- MATRICES
@@ -48,6 +53,9 @@ def ARCHIVO_cargar_salas(salasCine):
 
 
 # ------------- UTILIDADES GENERICAS
+
+def UTILS_limpiar_pantalla():
+    system('cls')
 
 def UTILS_ingresar_entero_en_rango(enteroInicial, enteroFinal, mensajeError):
     '''Le pide al usuario ingresar un numero hasta que el mismo sea un entero, comprendido entre el rango solicitado.
@@ -105,7 +113,7 @@ def SALA_obtener_butacas(registroSalaSeleccionada):
         print("!> No se pudo obtener la información completa de las salas, por favor revise la estructura del archivo \"salas.txt\"")
 
     #simulamos el llenado de butacas utilizando cargar_sala y anexamos dicha matriz de butacas para tener un solo registro que consumir
-    butacas_sala = FUNCIONES_MESA6.cargar_sala(matrizSalaVacia)
+    butacas_sala = SC_MODULOS_CINE.cargar_sala(matrizSalaVacia)
     registroSalaSeleccionada.append([])
     registroSalaSeleccionada[3] = butacas_sala
 
@@ -115,7 +123,7 @@ def SALA_mayor_cantidad_butacas_contiguas(salaSeleccionada):
     #iteramos el llamado de butacas_contiguas para buscar el mayor espacio disponible en la sala
     mayorCantidadButacasJuntas = 0
     for fila in range(int(salaSeleccionada[1])):
-        columna,cantidadButacas = FUNCIONES_MESA6.butacas_contiguas(salaSeleccionada[3], fila)
+        columna,cantidadButacas = SC_MODULOS_CINE.butacas_contiguas(salaSeleccionada[3], fila)
         if cantidadButacas > mayorCantidadButacasJuntas:
             mayorCantidadButacasJuntas = cantidadButacas
             filaButacaContigua = fila
@@ -138,9 +146,9 @@ def RESERVA_intentar_reserva_individual(salaSeleccionada):
     butacaElegida = UTILS_ingresar_entero_en_rango(0,totalButacasSala,mensajeErrorCapacidad)
 
     fila,columna = UTILS_transformar_butaca_en_coordenada(butacaElegida, salaSeleccionada)    
-    reservaRealizada = FUNCIONES_MESA6.reservar(butacas,fila,columna)
-    system('cls')
-    FUNCIONES_MESA6.mostrar_butacas(butacas)
+    reservaRealizada = SC_MODULOS_CINE.reservar(butacas,fila,columna)
+    UTILS_limpiar_pantalla()
+    SC_MODULOS_CINE.mostrar_butacas(butacas)
 
     if not (reservaRealizada):        
         print("!> La butaca que intentó reservar ya se encuentra ocupada")
@@ -157,13 +165,13 @@ def RESERVA_realizar_reserva_multiple(salaSeleccionada, fila, columnaInicial, ca
     for reserva in range(cantidadReservas):            
         #no me interesa evaluar si la reserva fue realizada ya que butacas_contiguas me aseguró antes que esos lugares estan disponibles
         #si el sistema se ejecutara en varios equipos y editaran una misma base/archivo, si deberia cotejar.
-        FUNCIONES_MESA6.reservar(butacas,fila,columna)
+        SC_MODULOS_CINE.reservar(butacas,fila,columna)
         columna += 1      
 
 def RESERVA_iniciar_reservacion(salaSeleccionada):
     '''Realizamos la reserva de butacas en la sala recibida, obteniendo del usuario la cantidad de entradas que desea'''
     butacas = salaSeleccionada[3] #obtenemos la matriz en una variable de butacas para mayor legibilidad
-    capacidadSala = FUNCIONES_MESA6.butacas_libres(butacas)
+    capacidadSala = SC_MODULOS_CINE.butacas_libres(butacas)
         
     #obtenemos la cantidad de entradas que desea el usuario
     print(f"■ QUEDAN {capacidadSala} ASIENTOS DISPONIBLES")
@@ -188,8 +196,8 @@ def RESERVA_iniciar_reservacion(salaSeleccionada):
             if (respuestaUsuario.lower() == "r"):            
                 RESERVA_realizar_reserva_multiple(salaSeleccionada, filaButacaContigua, columnaButacaContigua, cantidadEntradas)
                 resevaMultipleRealizada = True            
-                system('cls')
-                reservaRealizada = FUNCIONES_MESA6.mostrar_butacas(butacas)
+                UTILS_limpiar_pantalla()
+                reservaRealizada = SC_MODULOS_CINE.mostrar_butacas(butacas)
 
     if not resevaMultipleRealizada:
         print("")
@@ -215,7 +223,7 @@ def RESERVA_iniciar_reservacion(salaSeleccionada):
 def SISTEMA_carga_inicial():
     '''Muestro los mensajes de inicio del sistema y obtengo la sala (junto a sus butacas) en la cual quiero realizar la reserva'''
 
-    system('cls')     
+    UTILS_limpiar_pantalla()     
     print("■ Iniciando SIRA: (Sistema Integral de Reserva de Asientos)")
     print("■ BIENVENIDO!     (Producto registrado a nombre de CINES DEL BARRIO S.R.L)")
     print("")
@@ -227,7 +235,7 @@ def SISTEMA_carga_inicial():
     salaSeleccionada = SALA_seleccionar(salasCine)
     SALA_obtener_butacas(salaSeleccionada)
 
-    system('cls')
+    UTILS_limpiar_pantalla()
     print(f"■ SALA \"{salaSeleccionada[0]}\"")
     return salaSeleccionada
 
@@ -247,7 +255,7 @@ def SISTEMA_carga_inicial():
 def main():
     salaSeleccionada = SISTEMA_carga_inicial()   
     butacas = salaSeleccionada[3] 
-    FUNCIONES_MESA6.mostrar_butacas(butacas)
+    SC_MODULOS_CINE.mostrar_butacas(butacas)
     RESERVA_iniciar_reservacion(salaSeleccionada)
 
 main()

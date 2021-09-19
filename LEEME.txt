@@ -1,0 +1,96 @@
+#SOLUCIONES CINÉFILAS S.R.L
+#GRACIAS POR ADQUIRIR S.I.R.A (SISTEMA INTEGRAL DE RESERVA DE ASIENTOS)!
+#SITIO WEB: www.soluciones-cinefilas.com.ar
+
+
+#--- CONTEXTO DE USO Y ENTRADAS NECESARIAS:
+
+#El sistema necesita integrarse con su sistema de seleccion de cartelera.
+#(consulte nuestro sitio web para adquirir S.I.C.C (SISTEMA INTEGRAL DE CARTELERA DE CINES))
+
+#El sistema de cartelera de su preferencia deberá exponer un archivo "salas.txt"
+#el cual es necesario para el funcionamiento de S.I.R.A
+
+#El formato del archivo debe ser el siguiente:
+#NOMBRE_SALA; FILAS; COLUMNAS;
+
+
+
+#--- USO:
+
+#Al iniciar, podrá visualizar las salas recibidas de la cartelera, permitiendole 
+#elegir en cual desea ver la pelicula. Una vez seleccionada, podrá realizar la reserva
+
+#El sistema cuenta con un modulo de asistencia para sugerir butacas que se encuentren cercanas
+#en caso de recibir solicitudes de 2 o más entradas, con el objetivo de acelerar la reserva
+#cuando se reciben grupos de clientes numerosos.
+
+#Finaliza la reserva, el sistema enviará la información de entradas al modulo de facturación, 
+el cual continuara con la operación de venta de tickets.
+#(consulte nuestro sitio web para adquirir S.F.C (SISTEMA DE FACTURACIÓN PARA CINES))
+
+
+
+#--- INFORMACIÓN PARA DESARROLLADORES:
+
+#SOLUCIONES CINÉFILAS cree en el potencial de expansión de nuestros productos, por lo tanto
+#S.I.R.A y todos nuestros modulos incluyen el código al momento de la compra, para que ud.
+#pueda adaptarlo conforme a sus necesidades (licencias y mas información en nuestro sitio web).
+#Por lo tanto, se le informará brevemente como se encuentra diseñada la arquitectura del codigo fuente.
+
+
+#-- ARQUITECTURA
+
+#El codigo se compone de un archivo MAIN.py el cual contiene toda la lógica del programa. A su vez,
+#utiliza una librería genérica proporcionada por nuestra empresa, la cual se encuentra en SC_MODULOS_CINE.py
+
+#El archivo MAIN.py se encuentra distribuido en modulos de funciones, los cuales se divien en: 
+#(el orden aqui descripto es similar al que se encontrará en el archivo MAIN)
+
+# -> MATRICES: funciones responsables del manejo de matrices
+
+# -> ARCHIVOS: funciones encargadas del manejo de archivos, utilizadas para consumir "salas.txt"
+
+# -> UTILIDADES GENÉRICAS: cargas de datos que deban pedirse al usuario, y conversiones del
+						   modelo de datos (butaca <-> coordenada) que se puedan precisar.
+						   Tambien incluye el sistema de limpieza de pantalla
+						   
+# -> SALAS: logica de negocio relacionada a la creación y manejo de registros de sala y sus butacas
+
+# -> RESERVAS: logica de negocio relacionada a efectuar reservas, tanto individuales como múltiples
+
+# -> SISTEMA: funciones asociadas a la carga inicial del sistema
+
+
+#-- LIBRERÍAS EXTERNAS
+
+#El sistema utiliza las librerias MATH (calculos de posición de butacas) y OS.SYSTEM para
+#poder limpiar la pantalla de vez en cuando y mejorar la experiencia de usuario
+
+#Debido a esto, el sistema no se ejecutará correctamente fuera de WINDOWS.
+#De todos modos nuestro equipo de desarrollo unifico la funcion que se encarga de este proceso
+#en la funcion UTILS_limpiar_pantalla, con el objetivo de facilitar su desactivación o modificación
+#por si no funciona adecuadamente
+
+#En caso de ejecutarse en consolas LINUX, lo mas probable es que se deba modificar el comando
+#'clear' por 'cls'
+
+
+# ------------------------------------------
+#-- ESPERAMOS QUE DISFRUTE NUESTRO PRODUCTO!
+#ATTE. El equipo de SC
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
