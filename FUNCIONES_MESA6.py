@@ -82,7 +82,7 @@ def reservar(matriz,x,y):
     reserva = True
     try:
         if matriz[x][y] == 0:
-            matriz[x][y] = 2
+            matriz[x][y] = 1
         else:
             reserva = False
     
